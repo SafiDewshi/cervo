@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>663</width>
-    <height>561</height>
+    <width>1267</width>
+    <height>1049</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -26,11 +26,58 @@
        </attribute>
        <layout class="QVBoxLayout" name="verticalLayout_2">
         <item>
-         <layout class="QVBoxLayout" name="verticalLayout">
-          <item>
+         <layout class="QGridLayout" name="gridLayout_2">
+          <item row="2" column="0">
+           <layout class="QHBoxLayout" name="horizontalLayout_2">
+            <item>
+             <widget class="QRadioButton" name="showZoos">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+              <property name="text">
+               <string>Show Zoos</string>
+              </property>
+              <attribute name="buttonGroup">
+               <string notr="true">speciesMoreInfo</string>
+              </attribute>
+             </widget>
+            </item>
+            <item>
+             <widget class="QRadioButton" name="showExtraInfo">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+              <property name="text">
+               <string>Show Aditional Species Info</string>
+              </property>
+              <attribute name="buttonGroup">
+               <string notr="true">speciesMoreInfo</string>
+              </attribute>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="refineSearchButton">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+              <property name="text">
+               <string>Show Aditional Details</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item row="0" column="0">
            <layout class="QHBoxLayout" name="horizontalLayout">
             <item>
              <widget class="QLineEdit" name="searchBar"/>
+            </item>
+            <item>
+             <widget class="QCheckBox" name="visitableCheck">
+              <property name="text">
+               <string>Visitable in UK</string>
+              </property>
+             </widget>
             </item>
             <item>
              <widget class="QPushButton" name="searchButton">
@@ -41,43 +88,11 @@
             </item>
            </layout>
           </item>
-          <item>
-           <widget class="QListView" name="speciesListView"/>
+          <item row="1" column="0">
+           <widget class="QTableWidget" name="speciesView"/>
           </item>
-          <item>
-           <layout class="QHBoxLayout" name="horizontalLayout_2">
-            <item>
-             <widget class="QCheckBox" name="checkBox">
-              <property name="text">
-               <string>CheckBox</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QCheckBox" name="checkBox_2">
-              <property name="text">
-               <string>CheckBox</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QCheckBox" name="checkBox_3">
-              <property name="text">
-               <string>CheckBox</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QPushButton" name="refineSearchButton">
-              <property name="text">
-               <string>Show Aditional Details</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-          <item>
-           <widget class="QTextBrowser" name="speciesResults"/>
+          <item row="1" column="1">
+           <widget class="QTableWidget" name="extraInfoView"/>
           </item>
          </layout>
         </item>
@@ -107,8 +122,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>663</width>
-     <height>21</height>
+     <width>1267</width>
+     <height>31</height>
     </rect>
    </property>
   </widget>
@@ -116,4 +131,7 @@
  </widget>
  <resources/>
  <connections/>
+ <buttongroups>
+  <buttongroup name="speciesMoreInfo"/>
+ </buttongroups>
 </ui>
