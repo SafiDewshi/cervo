@@ -14,11 +14,14 @@ class CervoUI(QtWidgets.QMainWindow, Ui_MainWindow):
         QtWidgets.QMainWindow.__init__(self)
         Ui_MainWindow.__init__(self)
         self.setupUi(self)
-        self.searchButton.clicked.connect(self.search)
-        self.refineSearchButton.clicked.connect(self.refine)
+        self.searchButton.clicked.connect(self.species_search)
+        self.refineSearchButton.clicked.connect(self.refine_species_search)
+        self.zooSearchButton.clicked.connect(self.zoo_search)
+        self.refineZooSearch.clicked.connect(self.refine_zoo_search)
         self.currentSpecies = []
+        self.currentZoos = []
 
-    def search(self):
+    def species_search(self):
         searchtext = self.searchBar.text()
         print("Searching for: " + searchtext)
         url = localurl
@@ -32,7 +35,7 @@ class CervoUI(QtWidgets.QMainWindow, Ui_MainWindow):
                 ?animal cervo:hasLatinName ?latinname.
                 ?animal cervo:hasName ?name.
                 FILTER(EXISTS{{SELECT ?animal {{?animal ^cervo:keeps-animal|cervo:is-kept-at ?zoo.}}}})
-                FILTER(REGEX(?name, "deer", "i"))
+                FILTER(REGEX(?name, "{}", "i"))
             }}
             UNION
             {{
@@ -40,7 +43,7 @@ class CervoUI(QtWidgets.QMainWindow, Ui_MainWindow):
                 ?animal cervo:hasName ?name.
                 ?animal cervo:hasLatinName ?latinname.
                 FILTER(EXISTS{{SELECT ?animal {{?animal ^cervo:keeps-animal|cervo:is-kept-at ?zoo.}}}})
-                FILTER(REGEX(?collectiveterm, "deer", "i"))
+                FILTER(REGEX(?collectiveterm, "{}", "i"))
             }}}}
 
             """
@@ -75,10 +78,9 @@ class CervoUI(QtWidgets.QMainWindow, Ui_MainWindow):
         self.refineSearchButton.setEnabled(True)
         self.showZoos.setEnabled(True)
         self.showExtraInfo.setEnabled(True)
-        self.showZoos.setChecked(True)
         self.speciesView.setCurrentCell(0, 0)
 
-    def refine(self):
+    def refine_species_search(self):
         current_row = self.speciesView.currentRow()
         print(current_row)
         print(self.currentSpecies[current_row])
@@ -128,6 +130,84 @@ class CervoUI(QtWidgets.QMainWindow, Ui_MainWindow):
         results = r.json()
         formatted_extra_data = self.formatresults(results)
         self.format_view(formatted_extra_data, self.extraInfoView)
+
+    def zoo_search(self):
+        searchtext = self.zooSearchBar.text()
+        print("Searching for: " + searchtext)
+        url = localurl
+        sparql = """
+        PREFIX cervo: <http://www.cervo.io/ontology#>
+        
+        SELECT ?zooName ?postcode ?zooWebsite
+        WHERE
+        {{
+            ?zoo cervo:hasName ?zooName.
+            ?zoo cervo:hasPostcode ?postcode.
+            ?zoo cervo:hasURL ?zooWebsite
+            FILTER(REGEX(?zooName, "{}", "i"))
+        }}
+        """
+        sparql = sparql.format(searchtext)
+        # todo: split the repeated section into its own function
+        r = requests.get(url, params={'format': 'json', 'query': sparql})
+        results = r.json()
+        print(results)
+
+        formatted_zoos = self.formatresults(results)
+        self.currentZoos = formatted_zoos
+
+        self.format_view(formatted_zoos, self.zooView)
+        self.refineZooSearch.setEnabled(True)
+        self.locationInfo.setEnabled(True)
+        self.speciesKeptHere.setEnabled(True)
+        self.zooView.setCurrentCell(0, 0)
+
+    def refine_zoo_search(self):
+        current_row = self.zooView.currentRow()
+        print(current_row)
+        print(self.currentZoos[current_row])
+
+        if self.speciesKeptHere.isChecked():
+            url = localurl
+            sparql = """
+            PREFIX cervo: <http://www.cervo.io/ontology#>
+            
+            SELECT ?speciesKept
+            WHERE
+            {{
+                ?zoo cervo:hasPostcode "{}".
+                ?zoo cervo:hasName ?zooName.
+                ?zoo cervo:keeps-animal ?species.
+                ?species cervo:hasName ?speciesKept
+            }}
+            """
+        elif self.locationInfo.isChecked():
+            url = ordanancesurvey
+            sparql = """
+            PREFIX owl: <http://www.w3.org/2002/07/owl#>
+            PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+            PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+            PREFIX postcode: <http://data.ordnancesurvey.co.uk/ontology/postcode/>
+            
+            SELECT ?districtname ?countyname ?countryname
+            WHERE {{
+                ?postcodeUri rdfs:label "{}".
+                OPTIONAL{{?postcodeUri postcode:district ?district.
+                  ?district rdfs:label ?districtname}}.
+                OPTIONAL{{?postcodeUri postcode:county ?county.
+                  ?county rdfs:label ?countyname}}.
+                OPTIONAL{{?postcodeUri postcode:country ?country.
+                  ?country rdfs:label ?countryname}}
+            }}
+            """
+        else:
+            return
+
+        sparql = sparql.format(self.currentZoos[current_row]['postcode'])
+        r = requests.get(url, params={'format': 'json', 'query': sparql})
+        results = r.json()
+        formatted_extra_data = self.formatresults(results)
+        self.format_view(formatted_extra_data, self.zooExtraInfo)
 
     def format_view(self, formatted_data, view):
         if len(formatted_data) == 0:
