@@ -177,7 +177,7 @@ class CervoUI(QtWidgets.QMainWindow, Ui_MainWindow):
             {{
                 ?zoo cervo:hasPostcode "{}".
                 ?zoo cervo:hasName ?zooName.
-                ?zoo cervo:keeps-animal ?species.
+                ?zoo cervo:keeps-animal|^cervo:is-kept-at ?species.
                 ?species cervo:hasName ?speciesKept
             }}
             """
