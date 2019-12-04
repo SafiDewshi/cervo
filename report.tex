@@ -1,0 +1,70 @@
+\documentclass[a4paper]{article}
+
+\usepackage{graphicx}
+\usepackage{fancyhdr}
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{csquotes}% Recommended
+\usepackage[margin=1in]{geometry}
+\usepackage{minted}
+
+
+\usepackage[style=authoryear-ibid,backend=biber]{biblatex}
+
+\addbibresource{semantic_data.bib}
+
+
+\author{Safi Dewshi, 1559816}
+\title{Zoo aggregation using semantic data}
+\date{\today}
+
+
+
+\begin{document}
+\pagestyle{fancy}
+\rhead{Student ID: 1559816}
+\lhead{}
+\maketitle
+\pagebreak
+\tableofcontents
+\pagebreak
+
+
+\section{Introduction}
+This report will present and critique the <<SOMETHING>> of transferring a traditional relational data set into semantic data. Semantics is the study of meaning in language, and those codifying those meanings in a machine-readable format has several benefits for the field. For example, it allows programs to effectively "understand" what data means \autocite{Szeredi2014}.
+
+
+The aim of this report is to present and evaluate the success of transferring a conventional SQL database into a SPARQL one \autocite{Szeredi2014}
+
+
+
+\section{Concept and Aim}
+The intent of the project was to upgrade a SQL database into a SPARQL one that takes advantage of the interconnected nature of semantic data to allow more complex questions to be asked with simpler queries and to connect to external services to easily retrieve additional or updated data.
+\autocite{Cervo}
+
+
+
+It is planned for this application to completely replace the current SQL database that hosts the site
+
+
+\section{Design}
+\subsection{Semantic Data Technologies}
+
+\section{Evaluation and Use}
+
+\section{Critical Reflection}
+
+\section{Conclusion}
+
+\addcontentsline{toc}{section}{Bibliography}
+\printbibliography
+
+\addcontentsline{toc}{section}{Appendix}
+\section*{Appendix}
+\addcontentsline{toc}{subsection}{Appendix A}
+\subsection*{Appendix A}
+\newgeometry{margin=0.5in, top=1in, bottom=1in}
+\inputminted{python}{main.py}
+
+\end{document}
