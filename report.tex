@@ -8,9 +8,8 @@
 \usepackage{csquotes}% Recommended
 \usepackage[margin=1in]{geometry}
 \usepackage{minted}
-
-
 \usepackage[style=authoryear-ibid,backend=biber]{biblatex}
+\usepackage{hyperref}
 
 \addbibresource{semantic_data.bib}
 
@@ -35,21 +34,73 @@
 This report will present and critique the <<SOMETHING>> of transferring a traditional relational data set into semantic data. Semantics is the study of meaning in language, and those codifying those meanings in a machine-readable format has several benefits for the field. For example, it allows programs to effectively "understand" what data means \autocite{Szeredi2014}.
 
 
+\url{http://cervo.io}
 The aim of this report is to present and evaluate the success of transferring a conventional SQL database into a SPARQL one \autocite{Szeredi2014}
 
 
 
 \section{Concept and Aim}
 The intent of the project was to upgrade a SQL database into a SPARQL one that takes advantage of the interconnected nature of semantic data to allow more complex questions to be asked with simpler queries and to connect to external services to easily retrieve additional or updated data.
-\autocite{Cervo}
+
+Figure \ref{fig:semanticcake} shows an illustration of the semantic web stack
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=\linewidth/2]{project-resources/layerCake-4.png}
+	\caption{Semantic data "cake"\autocite{SemanticStack}}
+	\label{fig:semanticcake}
+\end{figure}
+Starting from the bottom, these layers are:
+\begin{enumerate}
+\item URI/IRI, which are used for referencing and identifying resources
+\item RDF/XML, which are used to store and represent information
+\item SPARQL/OWL, which are used to infer <<>>
+\item Finally a layer for delivering that information to the user
+\end{enumerate}
+
 
 
 
 It is planned for this application to completely replace the current SQL database that hosts the site
 
-
 \section{Design}
+
 \subsection{Semantic Data Technologies}
+With semantic data
+
+<<EXPLAIN TRIPLES>>
+
+
+
+\subsection{Ontology for cervo.io}
+Currently the website runs on a MySQL database, with several different tables containing the information needed to construct a taxonomic tree, populate it with species, and link those species to the zoos that keep them. 
+
+However this SQL solution had several problems that were easily remedied by switching to a SPARQL database: 
+
+It was inflexible and would require the schema to be rewritten to accommodate new types of data
+
+Several other queries became significantly easier to write by taking advantage of the triples. Additionally the use of common keys such as postcode and species names makes the incorporation of external data sets significantly easier even within a single query
+
+Additionally 
+
+\iffalse 
+
+all species under a given taxonomy (e.g. all species in mammalia) requires multiple queries in SQL, but can be done in one using SPARQL
+
+This is a problem because in the current iteration of the site, you can select a taxonomic category and it selects every species under it, which then can make many, maybe hundreds, of API requests to get all the data it needs, that cooould have been refactored to be one api request making many SQL queries but it wasn't thought the data would grow so large. But with sparql, it could easily be done in one query. 
+
+Getting additional information about species and zoos would be tedious and time consuming to enter, and likely to age poorly, but with sparql you can merge in datasets from dbpedia and such using common keys, such as Latin names.
+selecting animals not at any zoos is possible in sql, but the sparql looks neater
+similar with ones at less than 2 zoos
+Selecting stuff with some external property? Like animals of Nepal from dbpedia
+Similarly, getting all zoos in a county?
+Or all zoo animals in a county?
+
+\fi
+<<EXPLAIN SPARQL>>
+
+\section{Implementation}
+
+The GUI was built using QT Designer, which produced a .ui file which was then referenced in the main python code
 
 \section{Evaluation and Use}
 

@@ -87,7 +87,7 @@
              <bool>false</bool>
             </property>
             <property name="text">
-             <string>Show Aditional Species Info</string>
+             <string>Show Additional Species Info</string>
             </property>
             <attribute name="buttonGroup">
              <string notr="true">speciesMoreInfo</string>
@@ -100,7 +100,7 @@
              <bool>false</bool>
             </property>
             <property name="text">
-             <string>Show Aditional Details</string>
+             <string>Show Additional Details</string>
             </property>
            </widget>
           </item>
