@@ -226,7 +226,7 @@ class CervoUI(QtWidgets.QMainWindow, Ui_MainWindow):
     def formatresults(self, data):
         keys = data['head']['vars']
         results = data['results']['bindings']
-        return [{key: result[key]['value'] for key in keys} for result in results]
+        return [{key: result.get(key, {'value': None})['value'] for key in keys} for result in results]
 
 
 if __name__ == "__main__":

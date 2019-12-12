@@ -15,7 +15,8 @@
 
 
 \author{Safi Dewshi, 1559816}
-\title{Zoo aggregation using semantic data}
+\title{Zoo aggregation using semantic data: The advantages of Graph Databases}
+
 \date{\today}
 
 
@@ -31,54 +32,285 @@
 
 
 \section{Introduction}
-This report will present and critique the <<SOMETHING>> of transferring a traditional relational data set into semantic data. Semantics is the study of meaning in language, and those codifying those meanings in a machine-readable format has several benefits for the field. For example, it allows programs to effectively "understand" what data means \autocite{Szeredi2014}.
-
-
-\url{http://cervo.io}
-The aim of this report is to present and evaluate the success of transferring a conventional SQL database into a SPARQL one \autocite{Szeredi2014}
-
-
-
-\section{Concept and Aim}
-The intent of the project was to upgrade a SQL database into a SPARQL one that takes advantage of the interconnected nature of semantic data to allow more complex questions to be asked with simpler queries and to connect to external services to easily retrieve additional or updated data.
-
-Figure \ref{fig:semanticcake} shows an illustration of the semantic web stack
-\begin{figure}[h!]
-	\centering
-	\includegraphics[width=\linewidth/2]{project-resources/layerCake-4.png}
-	\caption{Semantic data "cake"\autocite{SemanticStack}}
-	\label{fig:semanticcake}
-\end{figure}
-Starting from the bottom, these layers are:
-\begin{enumerate}
-\item URI/IRI, which are used for referencing and identifying resources
-\item RDF/XML, which are used to store and represent information
-\item SPARQL/OWL, which are used to infer <<>>
-\item Finally a layer for delivering that information to the user
-\end{enumerate}
+This report will present and discuss the advantages and disadvantages  of transferring a traditional relational database into semantic graph database. 
+Semantics is the study of meaning in language, and those codifying those meanings in a machine-readable format has several benefits for the field of computing. For example, it allows programs to effectively "understand" what data means \autocite{Szeredi2014}.
 
 
 
 
-It is planned for this application to completely replace the current SQL database that hosts the site
+<<explanation/outline of what will be explained in each section>>
+
+
+
+\section{Advantages of Graph Databases}
+
+Traditional relational databases, typically queried via SQL, store data as tables. These tables are rigidly define, with columns and specified data types for each piece of data. Because of this strict table layout, data will often have to be split amongst multiple tables linked through foreign keys, which then need to be accessed through multiple JOIN queries which have significant performance impact as well as becoming significantly harder to read.
+
+In contrast, graph databases, which we will query with SPARQL (Short for SPARQL Protocol and RDF Query Language \footnote{where SPARQL is short for SPARQL Protocol and RDF Query Language, which is short for SPARQL Protocol and RDF Query Language etc. etc.}) is used for queries graph data.
+
+Storing data in a graph has multiple advantages for storing data with multiple relations. As an example, we can consider books and their authors. Since one author can write multiple books and one book can have multiple authors, we would need multiple tables. One table to describe the authors, one to describe the books, and one to link the first two. Then to find the what books a certain author has written we would need to query the first table to find that author, join it to the third table to get a list of IDs and then join those to the second one to find the titles of the books. It is easy to see how this type of query can get very complicated and computationally expensive. With a graph database, we can simply look for the relation between author and book.
+
+\section{Aim}
+
+The intent of the project was to upgrade a SQL database into a SPARQL one that takes advantage of the interconnected nature of semantic data to allow more complex questions to be asked with simpler queries and to connect to external services to easily retrieve additional or updated data. As well as this, the SPARQL database is significantly more flexible and allows data on species and zoos to be in a much less rigid way.
+
+
+The application provides an easy way for users to search for species and zoos and see additional information (both local and remote) about those things.
+
+It is planned for this SPARQL to completely replace the current SQL database that hosts the site
 
 \section{Design}
 
 \subsection{Semantic Data Technologies}
-With semantic data
+As we discussed earlier, semantic data revolves around storing data in graphs. Data is stored as nodes with attributes and relationships between them. 
 
-<<EXPLAIN TRIPLES>>
+SPARQL, as the expansion of the acronym suggests, is a language for querying RDF\footnote{Resource Description Framework}data. Although that data can be serialized in multiple forms, all the data takes the form of resources, properties, and statements that use properties to describe resources.
+
+These statements are also known as "triples" and take the form \texttt{subject-predicate-object}, that is to say Resource A has Property B to Resource C\footnote{Resource C could also be a simple literal}. As an example, we could store the author of a book by saying \texttt{Book hasAuthor Author}. 
+
+We can make a series of statements about our resources and build up our database this way.
+
+In RDF, resources are identified using URIs\footnote{Uniform Resource Identifiers} or IRIs\footnote{Internationalized Resource Identifiers} which are the internationalized versions of URIs. URLs, which most people will be more familiar with, are a subset of URI/IRIs. An example of an IRI would be \verb|http://www.cervo.io/ontology#deer|\autocite{Smith2004}.
+
+The semantic web is the application of these technologies to the world wide web. Figure \ref{fig:semanticcake} illustrates how those layers work on top of each other. The key layers for us are: 
+\begin{enumerate}
+\item URI/IRI, which are used for referencing and identifying resources
+\item RDF/XML, which is a format used to store and represent information
+\item SPARQL/OWL, which are used to organise the data and express it in a way that a computer can take advantage of the knowledge
+\item Finally a set of layers for delivering that information to the user
+\end{enumerate}
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\linewidth/2]{project-resources/layerCake-4.png}
+	\caption{Semantic web stack\autocite{SemanticStack}}
+	\label{fig:semanticcake}
+\end{figure}
+
+SPARQL has four basic query types: 
+\begin{enumerate}
+\item SELECT, which is used to extract data from the database in the form of a table
+\item CONSTRUCT, which is similar to SELECT but returns the data as an RDF graph.
+\item ASK, which gives a true/false result for a query
+\item DESCRIBE, which returns a RDF graph that 'describes' a resource.
+\end{enumerate}
+
+We will primarily be using SELECT as that returns data in the most convenient way for our purposes.
 
 
+\iffalse
+We can avoid having to type the entire URI/IRI by defining a prefix at the start such as \verb|<rdf:RDF xmlns:cervo="http://www.cervo.io/ontology#">|.
+
+
+Storing data in this way allows us to take advantage of shared vocabulary and query other graph databases.
+
+1 Demonstrate an in-depth knowledge of semantic data technologies.
+2 Understand and critically appraise the uses of RDF and ontologies for big data, internet and knowledge based applications.
+3 Understand the theoretical underpinnings and their application in semantic based reasoning.
+\fi
 
 \subsection{Ontology for cervo.io}
-Currently the website runs on a MySQL database, with several different tables containing the information needed to construct a taxonomic tree, populate it with species, and link those species to the zoos that keep them. 
+Currently the website runs on a MySQL database, with several different tables containing the information needed to construct a taxonomic tree, populate it with species, and link those species to the zoos that keep them as shown in Figure \ref{ref:cervoSQL}. 
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{project-resources/sql-database.png}
+\caption{Current database schema diagram}
+\label{ref:cervoSQL}
+\end{figure}
 
-However this SQL solution had several problems that were easily remedied by switching to a SPARQL database: 
 
-It was inflexible and would require the schema to be rewritten to accommodate new types of data
+However this SQL solution had several problems that were easily remedied by switching to a SPARQL database:
+\begin{enumerate}
+\item It was inflexible and would require the schema to be rewritten to accommodate new types of data
+\item Certain queries, such as retrieving all animals under "Mammalia" require complicated and expensive SQL queries
+\item Supplementary data would require manual data entry and would be susceptible to becoming outdated
+\end{enumerate} 
+
 
 Several other queries became significantly easier to write by taking advantage of the triples. Additionally the use of common keys such as postcode and species names makes the incorporation of external data sets significantly easier even within a single query
+
+
+<<EXPLAIN SPARQL>>
+
+\subsection{Overview of Ontology Schema}
+The ontology for the database was created using Protégé, a free open-source ontology editor developed at the Stanford Center for Biomedical Informatics Research\autocite{Musen2015}. Protégé implements a GUI to design, visualise, and ensure the internal consistency of an ontology. Once completed the ontology can be imported into a database such as Apache Jena Fuseki
+
+Figure \ref{fig:ontologymetrics} shows the metrics of the completed ontology from Protégé. It has over 2400 individuals, which where imported from the SQL database and formatted using Python, split amongst 35 classes. 
+The class hierarchy is shown in Figure \ref{fig:classhierarchy}. The "Location" class represents, as the name suggests, locations where animals are kept such as zoos or wildlife refuges and the "Species" class represents the animals that can be kept in those locations. These two classes represent most of the individuals stored in the database. The "phylogeneticTree" class and its subclasses represent a way of categorising species based off their evolutionary relationships\autocite{Rintoul2016}. Whilst this is by necessity somewhat imprecise\footnote{nature does not like fitting into our neat little boxes}, it nevertheless provides a convenient way to group species. In our case it means we can, select all mammals by their relation back to the class "Mammalia", all big cats by their relation to the genus "Panthera", or all cats by the family "Felidae". The "collectiveTerm" subclass is an extension of this that both allows us to more easily select one of those groups or to make more arbitrary groupings such as "Fluffy animals". Whilst this database only contains a subset of the kingdom "Animalia", the framework is there for it to be expanded other kingdoms or even to all living organisms\footnote{Although how one would go to a zoo to see a bacteria or other single-celled organism is a separate matter}.
+\begin{figure}[h!]
+\noindent\begin{minipage}{.45\textwidth}
+\includegraphics[width=\textwidth]{project-resources/protege-ontologymetrics1.png}
+\end{minipage}\hfill
+\begin{minipage}{.45\textwidth}
+\includegraphics[width=\textwidth]{project-resources/protege-ontologymetrics2.png}
+\end{minipage}
+\caption{Ontology Metrics from Protégé}
+\label{fig:ontologymetrics}
+\end{figure}
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=\linewidth/2]{project-resources/protege-classhierarchy.png}
+	\caption{Class Hierarchy}
+	\label{fig:classhierarchy}
+\end{figure}
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=\linewidth]{project-resources/protege-ontograph.png}
+	\caption{Ontograph showing class relationships}
+	\label{fig:ontograph}
+\end{figure}
+
+Figure \ref{fig:ontograph} shows a visual overview of the classes and their object property relations (Which are expanded in Figure \ref{fig:objectproperties}). Species \texttt{are-kept-at} locations and inversely a location \texttt{keeps-animals} species. Animals \texttt{are-known-as} collective terms and the inverse; collective terms \texttt{can-refer-to} animals. The taxonomy for the phylogenetric tree is grouped under \texttt{taxonomic-relation}, where \texttt{is-species-in} and \texttt{contains-species} relate species to their genus and \texttt{contains-clade} and \texttt{is-clade-in} relate sub-classes under the phylogenetic tree (kingdom to phylum to order and so on). \texttt{is-species-in} and \texttt{is-clade-in} are functional properties to enforce the tree structure.
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=\linewidth/2]{project-resources/protege-objectproperty.png}
+	\caption{Object Properties}
+	\label{fig:objectproperties}
+\end{figure}
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=\linewidth/2]{project-resources/protege-dataproperty.png}
+	\caption{Data Properties}
+	\label{fig:dataproperties}
+\end{figure}
+
+Individuals also have data properties associated with them, and these are listed in Figure \ref{fig:dataproperties}. All individuals have names, \texttt{hasName} which is broadly interchangeable with \texttt{rdfs:label} or \texttt{foaf:name}. Species have \texttt{hasLatinName}, which matches up with dbpedia's \texttt{dbp:taxon}, and locations have longitude/latitude, postcode, and url properties. Longitude and latitude were stored as well as postcode for improved precision in navigating to the entrance.
+
+Figure \ref{fig:zooindividual} shows an individual zoo, with a data property for each animal kept at that location and data properties for additional information about the location; name, website, and geographic information. Figure \ref{fig:speciesindividual} shows an individual species. This has information that has been inferred by our reasoner, in particular the \texttt{is-kept-at} link is implied as it is the inverse of \texttt{keeps-species}. It also includes a link back to its genus, its collective term(s), and some data about the species such as name and latin name.
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=\linewidth/2]{project-resources/protege-individualspecies.png}
+	\caption{An example species individual}
+	\label{fig:speciesindividual}
+\end{figure}
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=\linewidth/2]{project-resources/protege-individualzoo.png}
+	\caption{An example zoo individual}
+	\label{fig:zooindividual}
+\end{figure}
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=\linewidth]{project-resources/protege-indivontograph.png}
+	\caption{Ontograph showing some individuals}
+	\label{fig:indivontograph}
+\end{figure}
+
+In Figure \ref{fig:indivontograph} we can see the result of a search for "Woburn" which has found two locations and the species kept there.
+
+
+
+\section{Evaluation and Use}
+This section will show and explain some of the SPARQL queries used.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.75\linewidth]{project-resources/sparql-all-animals.png}
+	\includegraphics[width=\linewidth]{project-resources/sparql-all-animals-results.png}
+	\caption{A SPARQL query retrieving all animals stored in the database}
+	\label{fig:sparql-all-animals}
+\end{figure}
+Figure \ref{fig:sparql-all-animals} shows a basic query, simply finding all \texttt{?animal} which are under the subclass cervo:animal, and then retrieving their IRI, Name, and Latin name
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.75\linewidth]{project-resources/sparql-all-animals-not-in-zoo.png}
+	\includegraphics[width=\linewidth]{project-resources/sparql-all-animals-not-in-zoo-results.png}
+	\caption{All animals with no location object property}
+	\label{fig:sparql-all-animals-not-in-zoo}
+\end{figure}
+
+Figure \ref{fig:sparql-all-animals-not-in-zoo} extends this and shows all animals not found at a location by using the \texttt{NOT EXISTS} field to filter out any animals with the cervo:is-kept-at or the inverse of cervo:keeps-animal relation.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.75\linewidth]{project-resources/sparql-all-animals-in-zoos-ordered-by-col-term.png}
+	\includegraphics[width=\linewidth]{project-resources/sparql-all-animals-in-zoos-ordered-by-col-term-results.png}
+	\caption{All animals sorted by collective term}
+	\label{fig:sparql-all-animals-in-zoos-ordered-by-col-term}
+\end{figure}
+
+Figure \ref{fig:sparql-all-animals-in-zoos-ordered-by-col-term} finds all animals that are kept in a location, and lists them in order of their collective term. Since not every animal has a collective term, this query is kept in an \texttt{OPTIONAL} query, so that animals without an assigned term will still show up.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.75\linewidth]{project-resources/sparql-all-mammals.png}
+	\includegraphics[width=\linewidth]{project-resources/sparql-all-mammals-results.png}
+	\caption{A query matching all mammals}
+	\label{fig:sparql-all-mammals}
+\end{figure}
+
+In Figure \ref{fig:sparql-all-mammals}, we find the individual with the name "Mammalia", then the asterisk matches any number of \texttt{\^cervo:is-clade-in} until it arrives at one that has the property \texttt{\^cervo:is-species-in}. At that point it finds the name of the genus and the species and sorts the results by the genus name. An \texttt{INSERT} clause could then be used to add the collective term of "mammal" for all those species
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.75\linewidth]{project-resources/sparql-animal-by-regex-name.png}
+	\includegraphics[width=\linewidth]{project-resources/sparql-animal-by-regex-name-results.png}
+	\caption{Using regex to filter names that match a string}
+	\label{fig:sparql-animal-by-regex-name}
+\end{figure}
+
+Figure \ref{fig:sparql-animal-by-regex-name} shows an example of using regular expressions to filter the query. In this case it is matching all animals where the name matches the string "Ch" case insensitively. This is vital for searching the database without an exact knowledge of how the names have been entered into the database.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.75\linewidth]{project-resources/sparql-animals-in-less-than-zoos.png}
+	\includegraphics[width=\linewidth]{project-resources/sparql-animals-in-less-than-zoos-results.png}
+	\caption{Finding species kept at $\leq$ 2 zoos}
+	\label{fig:sparql-rare-animals}
+\end{figure}
+
+Figure \ref{fig:sparql-rare-animals} shows the number of zoos an animal is kept at, and then uses the \texttt{HAVING} criteria to narrow the results down to species found in $\leq$ 2 zoos. 
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.75\linewidth]{project-resources/sparql-dbpedia-species-lookup.png}
+	\caption{Querying DBPedia}
+	\label{fig:sparql-dbpedia-species-lookup}
+\end{figure}
+
+Figure \ref{fig:sparql-dbpedia-species-lookup} is now querying DBPedia's SPARQL endpoint. It was noted that dbpedia's \texttt{taxon} property matched the \texttt{hasLatinName} from our database. This means that we can query this external resource and get additional data from the remote resource. This highlights one of the key advantages of semantic technologies since our application can "understand" the information contained in DBPedia.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.75\linewidth]{project-resources/sparql-postcode-lookup.png}
+	\caption{Querying Ordnance Survey's postcode database}
+	\label{fig:sparql-postcode-lookup}
+\end{figure}
+
+Similarly to Figure \ref{fig:sparql-dbpedia-species-lookup}, Figure \ref{fig:sparql-postcode-lookup} is querying an external resource. This time we are asking Ordnance Survey's endpoint for more information about the postcodes we have associated with our location individuals. Many \texttt{OPTIONAL} operations were used in this query as it is uncertain how much of that information exists for each postcode.
+
+
+\section{Implementation}
+
+
+
+The GUI was built using QT Designer, which produced a .ui file which was then referenced in the main python code with functions added to handle button pushes and so on.
+
+SPARQL queries were handled using the python \texttt{requests} library to send \texttt{GET} request to both the local and remote endpoints. Their responses were converted into json and then parsed through the application and presented to the user in table views.
+\section{Critical Reflection}
+
+The graph database provides clear advantages over the previous relational MySQL database. 
+It is significantly more flexible and able to account for an animal having multiple names as well as adding extra information about the animals without needing to significantly rework the underlying data structure. Queries are also significantly more intuitive and self-explanatory compared to an SQL database.
+Queries such as the one shown in Figure \ref{fig:sparql-all-mammals} would require multiple queries and recursive joins in the SQL database to travel down the taxonomy but is the matter of a few lines in SPARQL. Similarly, we can ask more complex questions such as "What animals are kept in fewer than 2 zoos?" 
+
+
+Additionally the use of shared relations makes it simple to query external resources and update the database. 
+
+
+
+There is scope for significantly more complex queries. For example, a user may wish to know which zoos are in a certain range. In this case we can query our database for a list of zoos and then query Ordnance Survey to get the location information to filter that list.
+
+This means that if we want to get all the species that are inside a parent category, we have to first get the sub-categories, and then the sub categories of those and so on until we reach the base level
+
+<<Something about hosting solutions? >>
+
 
 Additionally 
 
@@ -96,26 +328,28 @@ Similarly, getting all zoos in a county?
 Or all zoo animals in a county?
 
 \fi
-<<EXPLAIN SPARQL>>
 
-\section{Implementation}
 
-The GUI was built using QT Designer, which produced a .ui file which was then referenced in the main python code
 
-\section{Evaluation and Use}
 
-\section{Critical Reflection}
 
 \section{Conclusion}
+This report explains the problems inherent to the existing relational database and outlines the benefits of switching to graph data structures 
+
+\pagebreak
 
 \addcontentsline{toc}{section}{Bibliography}
 \printbibliography
 
+\pagebreak
 \addcontentsline{toc}{section}{Appendix}
 \section*{Appendix}
 \addcontentsline{toc}{subsection}{Appendix A}
 \subsection*{Appendix A}
 \newgeometry{margin=0.5in, top=1in, bottom=1in}
 \inputminted{python}{main.py}
+
+\addcontentsline{toc}{subsection}{Appendix B}
+\subsection*{Appendix B}
 
 \end{document}
